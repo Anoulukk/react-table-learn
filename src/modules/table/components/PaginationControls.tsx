@@ -1,74 +1,67 @@
+import { Button } from "@/components/ui/button";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 export default function PaginationControls({ table }: { table: any }) {
   return (
-    <div className="flex items-center gap-2 justify-between">
-      <span className="flex items-center gap-1 text-sm">
-        <div>Page</div>
-        <p>
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full flex-wrap">
+      {/* Page info */}
+      <span className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+        <span>Page</span>
+        <p className="font-medium">
           {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </p>
       </span>
 
-      <div className="gap-2 flex items-center">
-        {/* <button className="border rounded p-1" onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
-        {'<<'}
-      </button> */}
-        <button
-          className="btn-primary border rounded p-1"
+      {/* Pagination controls */}
+      <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2">
+         <Button variant="outline" onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
+     {'<<'}
+    </Button>
+        <Button
+          variant="outline"
+          aria-label="Go Back"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
+          className="flex items-center gap-1 text-sm"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            className="w-5 h-5 rtl:-scale-x-100"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-            />
-          </svg>
-          {"Previous"}
-        </button>
-        <button
-          className="btn-primary border rounded p-1"
+          <ArrowLeftIcon className="w-4 h-4" />
+          Previous
+        </Button>
+
+        <Button
+          variant="outline"
+          aria-label="Go Forward"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
+          className="flex items-center gap-1 text-sm"
         >
-          {"Next"}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            className="w-5 h-5 rtl:-scale-x-100"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-            />
-          </svg>
-        </button>
-        {/* <button className="border rounded p-1" onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
-        {'>>'}
-      </button> */}
-        {/* <span>{table.getPrePaginationRowModel().rows.length} Rows</span> */}
-          <select
-            className="select-primary"
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => table.setPageSize(Number(e.target.value))}
-          >
+          Next
+          <ArrowRightIcon className="w-4 h-4" />
+        </Button>
+      <Button variant="outline" onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
+      {'>>'}
+      </Button>
+        <Select
+          value={String(table.getState().pagination.pageSize)}
+          onValueChange={(value) => table.setPageSize(Number(value))}
+        >
+          <SelectTrigger className="w-[140px] sm:w-[160px]">
+            <SelectValue placeholder="Rows per page" />
+          </SelectTrigger>
+          <SelectContent>
             {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
+              <SelectItem key={pageSize} value={String(pageSize)}>
                 Show {pageSize}
-              </option>
+              </SelectItem>
             ))}
-          </select>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

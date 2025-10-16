@@ -1,30 +1,32 @@
-import { useState } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export type Person = {
-  id: string
-  firstName: string
-  lastName: string
-}
+  id: string;
+  firstName: string;
+  lastName: string;
+};
 
 // Custom component inside the cell to handle modal logic
-function ModalEdit({ person }: { person: Person }) {
-  const [open, setOpen] = useState(false)
-
+export default function ModalEdit({
+  open,
+  editMode,
+  onOpenChange,
+  person,
+}: any) {
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        className="flex items-center gap-1"
-      >
-        Edit
-      </button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
-            <DialogTitle>Edit Person</DialogTitle>
+            <DialogTitle>
+              {editMode ? "Edit Person" : "View details"}
+            </DialogTitle>
           </DialogHeader>
 
           <form className="space-y-4 mt-4">
@@ -34,6 +36,7 @@ function ModalEdit({ person }: { person: Person }) {
                 type="text"
                 defaultValue={person.firstName}
                 className="w-full mt-1 border rounded-md p-2 text-sm"
+                disabled={!editMode}
               />
             </div>
             <div>
@@ -42,27 +45,33 @@ function ModalEdit({ person }: { person: Person }) {
                 type="text"
                 defaultValue={person.lastName}
                 className="w-full mt-1 border rounded-md p-2 text-sm"
+                disabled={!editMode}
               />
             </div>
-
-            <div className="flex justify-end gap-2">
-              <Button variant="ghost" onClick={() => setOpen(false)} type="button">
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  // TODO: handle save here
-                  console.log('Saved changes for:', person.id)
-                  setOpen(false)
-                }}
-                type="button"
-              >
-                Save
-              </Button>
-            </div>
+            {editMode && (
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => onOpenChange(false)}
+                  type="button"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    // TODO: handle save here
+                    console.log("Saved changes for:", person.id);
+                    onOpenChange(false);
+                  }}
+                  type="button"
+                >
+                  Save
+                </Button>
+              </div>
+            )}
           </form>
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
