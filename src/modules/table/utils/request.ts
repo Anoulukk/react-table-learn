@@ -1,5 +1,5 @@
 import { Person } from "../Table";
-import axios from "axios";
+//import axios from "axios";
 
 
 const getData = async (): Promise<Person[]> => {
